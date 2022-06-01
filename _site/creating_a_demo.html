@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="The easiest way to contribute to the SSS is to create a demo. Learning how to write a demo will provide insight into the overall functionality of the system.">
+<meta name="keywords" content="getting_startedtroubleshooting,  ">
+<title>Creating a Demo | SSS Docs</title>
+<link rel="stylesheet" href="css/syntax.css">
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
+<link rel="stylesheet" href="css/modern-business.css">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="css/customstyles.css">
+<link rel="stylesheet" href="css/boxshadowproperties.css">
+<!-- most color styles are extracted out to here -->
+<link rel="stylesheet" href="css/theme-red.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="js/jquery.navgoco.min.js"></script>
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!-- Anchor.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.2.0/anchor.min.js"></script>
+<script src="js/toc.js"></script>
+<script src="js/customscripts.js"></script>
+
+<link rel="shortcut icon" href="images/favicon.ico">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="documentation-theme-jekyll" href="http://localhost:4000/feed.xml">
+
+
+
+    <script>
+        $(document).ready(function() {
+            // Initialize navgoco with default options
+            $("#mysidebar").navgoco({
+                caretHtml: '',
+                accordion: true,
+                openClass: 'active', // open
+                save: false, // leave false or nav highlighting doesn't work right
+                cookie: {
+                    name: 'navgoco',
+                    expires: false,
+                    path: '/'
+                },
+                slide: {
+                    duration: 400,
+                    easing: 'swing'
+                }
+            });
+
+            $("#collapseAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', false);
+            });
+
+            $("#expandAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', true);
+            });
+
+        });
+
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#tg-sb-link").click(function() {
+                $("#tg-sb-sidebar").toggle();
+                $("#tg-sb-content").toggleClass('col-md-9');
+                $("#tg-sb-content").toggleClass('col-md-12');
+                $("#tg-sb-icon").toggleClass('fa-toggle-on');
+                $("#tg-sb-icon").toggleClass('fa-toggle-off');
+            });
+        });
+    </script>
+    
+
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-static-top">
+    <div class="container topnavlinks">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="fa fa-home fa-lg navbar-brand" href="index.html">&nbsp;<span class="projectTitle"> Seven Segment Sign Documentation</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <!-- toggle sidebar button -->
+                <li><a id="tg-sb-link" href="#"><i id="tg-sb-icon" class="fa fa-toggle-on"></i> Nav</a></li>
+                <!-- entries without drop-downs appear here -->
+
+
+
+
+                
+                
+                
+                <li><a href="https://github.com/tomjoht/documentation-theme-jekyll" target="_blank" rel="noopener">GitHub</a></li>
+                
+                
+                
+                <li><a href="news">News</a></li>
+                
+                
+                
+                <!-- entries with drop-downs appear here -->
+                <!-- conditional logic to control which topnav appears for the audience defined in the configuration file.-->
+                
+                
+			<li>
+
+
+
+  <a class="email" title="Submit feedback" href="#" onclick="javascript:window.location='mailto:tomjoht@gmail.com?subject=Jekyll documentation theme feedback&body=I have some feedback about the Creating a Demo page: ' + window.location.href;"><i class="fa fa-envelope-o"></i> Feedback</a>
+
+</li>
+
+
+
+		
+                <!--comment out this block if you want to hide search-->
+                <li>
+                    <!--start search-->
+                    <div id="search-demo-container">
+                        <input type="text" id="search-input" placeholder="search...">
+                        <ul id="results-container"></ul>
+                    </div>
+                    <script src="js/jekyll-search.js" type="text/javascript"></script>
+                    <script type="text/javascript">
+                            SimpleJekyllSearch.init({
+                                searchInput: document.getElementById('search-input'),
+                                resultsContainer: document.getElementById('results-container'),
+                                dataSource: 'search.json',
+                                searchResultTemplate: '<li><a href="{url}" title="Creating a Demo">{title}</a></li>',
+                    noResultsText: 'No results found.',
+                            limit: 10,
+                            fuzzy: true,
+                    })
+                    </script>
+                    <!--end search-->
+                </li>
+            </ul>
+        </div>
+        </div>
+        <!-- /.container -->
+</nav>
+
+
+
+<!-- Page Content -->
+<div class="container">
+  <div id="main">
+    <!-- Content Row -->
+    <div class="row">
+        
+        
+            <!-- Sidebar Column -->
+            <div class="col-md-3" id="tg-sb-sidebar">
+                
+
+<ul id="mysidebar" class="nav">
+  <li class="sidebarTitle">SSS Docs 0.0.1</li>
+  
+  
+  
+      
+  
+  <li>
+      <a title="Overview" href="#">Overview</a>
+      <ul>
+          
+          
+          
+          <li><a title="Get started" href="index.html">Get started</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Introduction" href="mydoc_introduction.html">Introduction</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Supported features" href="mydoc_supported_features.html">Supported features</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="About the theme author" href="mydoc_about.html">About the theme author</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Support" href="mydoc_support.html">Support</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
+      <a title="Release Notes" href="#">Release Notes</a>
+      <ul>
+          
+          
+          
+          <li><a title="1.0 Release notes" href="mydoc_release_notes_10.html">1.0 Release notes</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
+      <a title="Installation" href="#">Installation</a>
+      <ul>
+          
+          
+          
+          <li class="active"><a title="Creating a Demo" href="creating_a_demo.html">Creating a Demo</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Install Jekyll on Mac" href="mydoc_install_jekyll_on_mac.html">Install Jekyll on Mac</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Install Jekyll on Windows" href="mydoc_install_jekyll_on_windows.html">Install Jekyll on Windows</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
+      <a title="Hardware" href="#">Hardware</a>
+      <ul>
+          
+          
+          
+          <li><a title="Pages" href="mydoc_pages.html">Pages</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Posts" href="mydoc_posts.html">Posts</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Lists" href="mydoc_lists.html">Lists</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Conditional logic" href="mydoc_conditional_logic.html">Conditional logic</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Content reuse" href="mydoc_content_reuse.html">Content reuse</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Collections" href="mydoc_collections.html">Collections</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="WebStorm editor tips" href="mydoc_webstorm_text_editor.html">WebStorm editor tips</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Atom editor tips" href="mydoc_atom_text_editor.html">Atom editor tips</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
+      <a title="Simulator" href="#">Simulator</a>
+      <ul>
+          
+          
+          
+          <li><a title="Sidebar navigation" href="mydoc_sidebar_navigation.html">Sidebar navigation</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="YAML tutorial in the context of Jekyll" href="mydoc_yaml_tutorial.html">YAML tutorial in the context of Jekyll</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Tags" href="mydoc_tags.html">Tags</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Series" href="mydoc_series.html">Series</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
+      <a title="Tutorials" href="#">Tutorials</a>
+      <ul>
+          
+          
+          
+          <li><a title="Tooltips" href="mydoc_adding_tooltips.html">Tooltips</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Alerts" href="mydoc_alerts.html">Alerts</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Icons" href="mydoc_icons.html">Icons</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Images" href="mydoc_images.html">Images</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Code samples" href="mydoc_code_samples.html">Code samples</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Labels" href="mydoc_labels.html">Labels</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Links" href="mydoc_hyperlinks.html">Links</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Navtabs" href="mydoc_navtabs.html">Navtabs</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Tables" href="mydoc_tables.html">Tables</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Syntax highlighting" href="mydoc_syntax_highlighting.html">Syntax highlighting</a></li>
+          
+          
+          
+          
+          
+          
+          <li><a title="Workflow maps" href="mydoc_workflow_maps.html">Workflow maps</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
+      <a title="Troubleshooting" href="#">Troubleshooting</a>
+      <ul>
+          
+          
+          
+          <li><a title="Commenting on files" href="mydoc_commenting_on_files.html">Commenting on files</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+      
+      <!-- if you aren't using the accordion, uncomment this block:
+         <p class="external">
+             <a href="#" id="collapseAll">Collapse All</a> | <a href="#" id="expandAll">Expand All</a>
+         </p>
+         -->
+</ul>
+
+<!-- this highlights the active parent class in the navgoco sidebar. this is critical so that the parent expands when you're viewing a page. This must appear below the sidebar code above. Otherwise, if placed inside customscripts.js, the script runs before the sidebar code runs and the class never gets inserted.-->
+<script>$("li.active").parents('li').toggleClass("active");</script>
+
+
+
+            </div>
+            
+        
+
+        <!-- Content Column -->
+        <div class="col-md-9" id="tg-sb-content">
+            <div class="post-header">
+   <h1 class="post-title-main">Creating a Demo</h1>
+</div>
+
+
+
+<div class="post-content">
+
+   
+    <div class="summary">The easiest way to contribute to the SSS is to create a demo. Learning how to write a demo will provide insight into the overall functionality of the system.</div>
+   
+
+    
+    
+<!-- this handles the automatic toc. use ## for subheads to auto-generate the on-page minitoc. if you use html tags, you must supply an ID for the heading element in order for it to appear in the minitoc. -->
+<script>
+$( document ).ready(function() {
+  // Handler for .ready() called.
+
+$('#toc').toc({ minimumHeaders: 0, listType: 'ul', showSpeed: 0, headers: 'h2,h3,h4' });
+
+/* this offset helps account for the space taken up by the floating toolbar. */
+$('#toc').on('click', 'a', function() {
+  var target = $(this.getAttribute('href'))
+    , scroll_target = target.offset().top
+
+  $(window).scrollTop(scroll_target - 10);
+  return false
+})
+
+});
+</script>
+
+<div id="toc"></div>
+
+
+
+    
+
+
+    
+
+    <a target="_blank" rel="noopener" href="https://github.com/tomjoht/documentation-theme-jekyll/blob/gh-pages/pages/mydoc/mydoc_creating_a_demo.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
+
+    
+
+   <p>At its core, using the SSS is meant to be a learning experience. Anyone who wants to know more about computer engineering and the Internet of Things can go through the demos and learn quite a bit by experiencing the end result. However, the SSS is also designed to be an educational tool for designers. Anyone with the desire can make a demo themselves without needing to understand the entire system! In this article, we will discuss the template for making one of these demos by looking at the template’s basic structure and its required subcomponents.</p>
+
+<h2 id="template-format">Template Format</h2>
+
+<p>All of the demos for the SSS are located in the <code class="language-plaintext highlighter-rouge">demos</code> folder in the <code class="language-plaintext highlighter-rouge">seven_segment_sign</code> repo that you clone from GitHub. If you take a look at the contents of <code class="language-plaintext highlighter-rouge">demos</code>, you’ll notice that each demo has its own folder with a <code class="language-plaintext highlighter-rouge">main.py</code> file inside of it:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>demos
+├── breakout
+│   ├── high_score.txt
+│   └── main.py
+├── breakout_ai
+│   └── main.py
+├── checkerboard
+│   └── main.py
+
+.... 
+</code></pre></div></div>
+
+<p>Notice that all of the folder names are <strong>lowercase</strong> and that all of the programs are named <strong>main.py</strong>. If you don’t follow this convention, the system won’t see your demo and it will fail to load when you run the program.</p>
+
+<p>But what goes inside of your <code class="language-plaintext highlighter-rouge">main.py</code> is what really counts. The following format must be observed for your demo to run correctly. If you want to use it as a boilerplate to get you started, you can always copy it from <code class="language-plaintext highlighter-rouge">demos/template/main.py</code>.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Template</span><span class="p">:</span>
+    <span class="s">"""This is a boilerplate class for creating new demos/games for the SSS platform. It needs to include definitions for the following functions: init, run, stop.
+    The init function needs to at least have the things shown below. Frame rate is in frames per second and demo time is in seconds. Demo time should be None if it is a game.
+    The run function yields a generator. This generator will be called a specified frame rate, this controls what is being pushed to the screen.
+    The stop function is called when the demo/game is being exited by the upper SSS software. It should reset the state for the game"""</span>
+
+    <span class="c1"># User input is passed through input_queue
+</span>    <span class="c1"># Game output is passed through output_queue
+</span>    <span class="c1"># Screen updates are done through the screen object
+</span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_queue</span><span class="p">,</span> <span class="n">output_queue</span><span class="p">,</span> <span class="n">screen</span><span class="p">):</span>
+        <span class="c1"># Provide the framerate in frames/seconds and the amount of time of the demo in seconds
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">frame_rate</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">demo_time</span> <span class="o">=</span> <span class="mi">300</span>  <span class="c1"># None for a game
+</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">input_queue</span> <span class="o">=</span> <span class="n">input_queue</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">output_queue</span> <span class="o">=</span> <span class="n">output_queue</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">screen</span>
+        <span class="c1"># init demo/game specific variables here
+</span>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Create generator here
+</span>        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">screen</span><span class="p">.</span><span class="n">draw_text</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">screen</span><span class="p">.</span><span class="n">x_width</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">5</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">screen</span><span class="p">.</span><span class="n">y_height</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">4</span><span class="p">,</span> <span class="s">"HELLO THERE"</span><span class="p">,</span> <span class="n">push</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">yield</span>
+
+    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Reset the state of the demo if needed, else leave blank
+</span>        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">get_input_buff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Get all input off the queue
+</span>        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">input_queue</span><span class="p">.</span><span class="n">queue</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>When creating your class object, name sure that the first letter of its name is capitalized. If you have a demo with two words (i.e. <code class="language-plaintext highlighter-rouge">breakout_ai</code>) make sure you capitalize the first letter of every word (i.e. <code class="language-plaintext highlighter-rouge">Breakout_Ai</code>). Failure to do this will cause your demo to not load or execute properly into the SSS system. You’ll also notice that apart from the normal Python <code class="language-plaintext highlighter-rouge">__init__()</code> method for a class, there is also a <code class="language-plaintext highlighter-rouge">run()</code> , <code class="language-plaintext highlighter-rouge">stop()</code> , and <code class="language-plaintext highlighter-rouge">get_input_buff()</code>. Implementing these functions is crucial to making sure that your demo will execute correctly at runtime. An explanation of what each one does is included below.</p>
+
+<h2 id="__init__"><code class="language-plaintext highlighter-rouge">__init__()</code></h2>
+
+<p>This function allows you to set up some initial values for your demo. For example, if you were creating a game and wanted to include the initial amount of lives or the amount of ammo in a shooter, <code class="language-plaintext highlighter-rouge">__init__()</code> is the perfect place to set that up! Apart demo-specific variables that could be initialized, there are also a few SSS specific variables which must also be initialized which will affect how your demo runs and interacts with the rest of the system.</p>
+
+<h3 id="frame_rate">frame_rate</h3>
+
+<p>This variable determines how fast your demo runs (i.e how many frames are rendered in a second). If your game is intended to have a buttery experience higher values will be more suited to your needs.</p>
+
+<p><em><strong>NOTE:</strong> setting the <code class="language-plaintext highlighter-rouge">frame_rate</code> too high can result in too quick of a game on the simulator or undefined behavior on the actual SSS due to hardware limitations.</em></p>
+
+<h3 id="demo_time">demo_time</h3>
+
+<p>If you are creating a non-interactive demo (i.e. a shape bouncing around the screen or some other concept that does not require input), you will need to set a demo_time. This value will determine how long your demo will run for when the SSS is in kiosk/screensaver mode (i.e. cycling through demos when no one is actively using it). If you are planning on developing an interactive demo/game, set this value to <code class="language-plaintext highlighter-rouge">None</code>.</p>
+
+<h3 id="input_queue">input_queue</h3>
+
+<p>If you are creating a demo which requires active user input, you will need to keep track of the values are are coming in through the input queue. Regardless of what controller is connected to the SSS, the supported inputs are:</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>LEFT_P</td>
+      <td>Left arrow pressed</td>
+    </tr>
+    <tr>
+      <td>LEFT_R</td>
+      <td>Left arrow released</td>
+    </tr>
+    <tr>
+      <td>RIGHT_P</td>
+      <td>Right arrow pressed</td>
+    </tr>
+    <tr>
+      <td>RIGHT_P</td>
+      <td>Right arrow released</td>
+    </tr>
+    <tr>
+      <td>UP_P</td>
+      <td>Up arrow pressed</td>
+    </tr>
+    <tr>
+      <td>UP_R</td>
+      <td>Up arrow released</td>
+    </tr>
+    <tr>
+      <td>DOWN_P</td>
+      <td>Down arrow pressed</td>
+    </tr>
+    <tr>
+      <td>DOWN_R</td>
+      <td>Down arrow released</td>
+    </tr>
+    <tr>
+      <td>START_P</td>
+      <td>Start button pressed</td>
+    </tr>
+    <tr>
+      <td>START_R</td>
+      <td>Start button released</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>By setting <code class="language-plaintext highlighter-rouge">self.input_queue = input_queue</code> you link the input_queue for your demo to the system’s input buffer. All input information can be retrieved directly through this object or by using the <code class="language-plaintext highlighter-rouge">get_input_buff()</code> function as explained below.</p>
+
+<p><em><strong>NOTE:</strong> This object is a Python Queue object. Any functions found <a href="https://docs.python.org/3/library/queue.html">here</a> can be used on this object.</em></p>
+
+<h3 id="output_queue">output_queue</h3>
+
+<p>If your demo needs to communicate information that will not be seen on the screen back to the user (i.e. a score or number of lives), this can be accomplished by using the output_queue. You can link your demo’s output_queue to the system output_queue by using <code class="language-plaintext highlighter-rouge">self.output_queue = output_queue</code>. At the current moment there are a limited amount of topics that you can send output through:</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>SCORE</td>
+      <td>Sets the score of a game.</td>
+    </tr>
+    <tr>
+      <td>LIVES</td>
+      <td>Keeps track of the amount lives of a player</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>To send data through one of these channels, you will <code class="language-plaintext highlighter-rouge">put</code> the name of the topic and the value you wish to send:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="bp">self</span><span class="p">.</span><span class="n">output_queue</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">"SCORE "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">score</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p><em><strong>NOTE:</strong> This object is a Python Queue object. Any functions found <a href="https://docs.python.org/3/library/queue.html">here</a> can be used on this object.</em></p>
+
+<h3 id="screen">screen</h3>
+
+<p>This object controls what will be drawn on the screen. Any functions as described in this <a href="https://www.notion.so/Game-Display-Graphics-functions-e2c7ef55e90645719b6f5440b07d9b79">API doc</a> will work on this screen object. The demo screen is connected to the SSS system screen as follows:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="bp">self</span><span class="p">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">screen</span>
+</code></pre></div></div>
+
+<h2 id="run"><code class="language-plaintext highlighter-rouge">run()</code></h2>
+
+<p>This function is what causes your actual program to run. Everything inside of this demo will be executed at runtime. Notice that in our boilerplate we surround the contents of this function with a <code class="language-plaintext highlighter-rouge">while True</code> loop ending with a <code class="language-plaintext highlighter-rouge">yield</code>. This special organization will cause whatever is inside the loop to be repeated until the system indicates that it is time for your demo to stop. By placing a <code class="language-plaintext highlighter-rouge">yield</code> keyword at the end of the loop, this converts the function from a <strong>blocking</strong> function to a <strong>non-blocking</strong> function (for the purposes of the system). If <code class="language-plaintext highlighter-rouge">yield</code> is not provided at the end of a frame rendering, the program will have no way to release control back to the SSS to actually draw anything or process any inputs and outputs that the demo. For a simple example of how a demo works with this non-blocking functionality, take a look at the <code class="language-plaintext highlighter-rouge">template</code> demo. For more complex examples, demos such as <code class="language-plaintext highlighter-rouge">game_of_life</code> , <code class="language-plaintext highlighter-rouge">snake</code>, or <code class="language-plaintext highlighter-rouge">breakout</code> which include multiple <code class="language-plaintext highlighter-rouge">yield</code>s for multiple cases.</p>
+
+<h2 id="stop"><code class="language-plaintext highlighter-rouge">stop()</code></h2>
+
+<p>Code in this function will be exited right as soon as your demo is ended by the SSS or user. If you need to reset state or do any sort of cleanup, that code belongs here. If there is nothing fancy like that in your demo, no worries! Just leave a <code class="language-plaintext highlighter-rouge">pass</code> and be on your merry way.</p>
+
+<h2 id="get_input_buff"><code class="language-plaintext highlighter-rouge">get_input_buff()</code></h2>
+
+<p>Most games on the SSS are pretty simple and are only meant to handle one keypress at a time. However, if you are feeling ambitious and want to keep track of multiple keypresses at a time (i.e. holding up and left to jump diagonally), this function will help you catch that by returning all keypresses waiting in the queue as a list. Below is a snippet from <code class="language-plaintext highlighter-rouge">breakout</code> which illustrates this functionality:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">keypress</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">get_input_buff</span><span class="p">():</span>
+    <span class="c1"># If there are directional buttons pressed
+</span>    <span class="k">if</span> <span class="n">keypress</span> <span class="o">==</span> <span class="s">"LEFT_P"</span><span class="p">:</span>
+        <span class="n">repeat_left</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">if</span> <span class="n">keypress</span> <span class="o">==</span> <span class="s">"LEFT_R"</span><span class="p">:</span>
+        <span class="n">repeat_left</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="n">keypress</span> <span class="o">==</span> <span class="s">"RIGHT_P"</span><span class="p">:</span>
+        <span class="n">repeat_right</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">if</span> <span class="n">keypress</span> <span class="o">==</span> <span class="s">"RIGHT_R"</span><span class="p">:</span>
+        <span class="n">repeat_right</span> <span class="o">=</span> <span class="bp">False</span> 
+</code></pre></div></div>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>By following the <code class="language-plaintext highlighter-rouge">template</code> format, you learn about and are accountable for most of the key components of a demo! If you are still feeling overwhelmed and don’t know where to start in your demo creation journey, take a look at some of the existing ones and try to modify them bit by bit, taking note of what changes you caused. If there are any clarifications that need to be made, please feel free to reach out to @Chris Kitras or @Ashton Palacios or just <a href="https://github.com/NET-BYU/seven_segment_sign/issues/new">open an issue on the GitHub repo</a> so we can help you and also update our docs. We’re excited to see what create!</p>
+
+
+
+    <div class="tags">
+        
+        <b>Tags: </b>
+        
+        
+        
+        <a href="tag_getting_started.html" class="btn btn-default navbar-btn cursorNorm" role="button">getting_started</a>
+        
+        
+        
+        <a href="tag_troubleshooting.html" class="btn btn-default navbar-btn cursorNorm" role="button">troubleshooting</a>
+        
+        
+        
+    </div>
+
+
+<div id="commento"></div>
+<script src="https://cdn.commento.io/js/commento.js"></script>
+<noscript>Please enable JavaScript to load the comments.</noscript>
+
+
+
+
+
+
+</div>
+
+<hr class="shaded"/>
+
+<footer>
+            <div class="row">
+                <div class="col-lg-12 footer">
+               &copy;2022 Copyright 2021 BYU NET Lab. All rights reserved. <br />
+ Site last generated: Jun 1, 2022 <br />
+<p><img src="images/company_logo.png" alt="Company logo"/></p>
+                </div>
+            </div>
+</footer>
+
+
+
+
+
+
+        </div>
+    <!-- /.row -->
+</div>
+<!-- /.container -->
+</div>
+<!-- /#main -->
+    </div>
+
+</body>
+
+</html>
+
+
