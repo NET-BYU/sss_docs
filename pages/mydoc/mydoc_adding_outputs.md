@@ -7,6 +7,7 @@ summary: "You can insert notes, tips, warnings, and important alerts in your con
 sidebar: mydoc_sidebar
 permalink: mydoc_adding_outputs.html
 folder: mydoc
+comments: false
 ---
 
 ## About alerts

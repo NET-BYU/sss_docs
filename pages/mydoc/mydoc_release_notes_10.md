@@ -7,6 +7,7 @@ summary: "Version 1.0 of the Seven Segment Sign is the initial, arbitrary releas
 sidebar: mydoc_sidebar
 permalink: mydoc_release_notes_10.html
 folder: mydoc
+comments: false
 ---
 
 ## Unique sidebars for each product

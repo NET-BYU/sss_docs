@@ -4,6 +4,7 @@ permalink: mydoc_install_sss_on_windows.html
 keywords: jekyll on windows, pc, ruby, ruby dev kit
 sidebar: mydoc_sidebar
 folder: mydoc
+comments: false
 ---
 
 {% include tip.html content="For a better terminal emulator on Windows, use [Git Bash](https://git-for-windows.github.io/). Git Bash gives you Linux-like control on Windows." %}

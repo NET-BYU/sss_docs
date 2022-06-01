@@ -7,6 +7,7 @@ summary: "You can integrate font icons through the Font Awesome and Glyphical Ha
 sidebar: mydoc_sidebar
 permalink: mydoc_adding_inputs.html
 folder: mydoc
+comments: false
 ---
 
 ## Font icon options

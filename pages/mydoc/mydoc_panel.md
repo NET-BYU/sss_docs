@@ -7,6 +7,7 @@ summary: "You can use posts when you want to create blogs or news type of conten
 sidebar: mydoc_sidebar
 permalink: mydoc_panel.html
 folder: mydoc
+comments: false
 ---
 
 ## About posts

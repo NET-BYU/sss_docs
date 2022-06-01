@@ -9,6 +9,7 @@ summary: "You can use an accordion-layout that takes advantage of Bootstrap styl
 toc: false
 folder: mydoc
 permalink: mydoc_common_issues.html
+comments: false
 ---
 
 <p>If you want to use an FAQ format, use the syntax shown on the faq.html page. Rather than including code samples here (which are bulky with a lot of nested <code>div</code> tags), just look at the source in the mydoc_faq.html theme file.</p>

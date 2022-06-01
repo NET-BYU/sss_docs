@@ -6,6 +6,7 @@ summary: "Installation of Jekyll on Mac is usually less problematic than on Wind
 sidebar: mydoc_sidebar
 permalink: mydoc_install_sss_on_mac_linux.html
 folder: mydoc
+comments: false
 ---
 
 ## Ruby and RubyGems

@@ -5,6 +5,7 @@ tags: [formatting]
 summary: "This page shows how to create both bulleted and numbered lists"
 sidebar: mydoc_sidebar
 permalink: mydoc_raspberry_pi_gpio.html
+comments: false
 ---
 
 ## Bulleted Lists
