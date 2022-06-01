@@ -1,5 +1,5 @@
 ---
-title:  "1st Place - ITCSA Raspberry Pi Contest"
+title:  "First Prize: ITCSA Raspberry Pi Contest"
 categories: jekyll update
 permalink: test-post-from-last-year.html
 tags: [news]

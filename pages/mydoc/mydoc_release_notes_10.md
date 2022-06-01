@@ -1,5 +1,5 @@
 ---
-title: Release notes 1.0
+title: Release Notes 1.0
 tags: [getting_started]
 keywords: release notes, announcements, what's new, new features
 last_updated: April 25, 2022

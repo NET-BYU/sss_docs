@@ -32,11 +32,7 @@ entries:
       url: /mydoc_introduction.html
       output: web, pdf
 
-    - title: Supported features
-      url: /mydoc_supported_features.html
-      output: web, pdf
-
-    - title: About the theme author
+    - title: About the team
       url: /mydoc_about.html
       output: web, pdf
 
@@ -56,60 +52,40 @@ entries:
     output: web, pdf
     folderitems:
 
-    - title: Creating a Demo
-      url: /creating_a_demo.html
+    - title: Install SSS on Mac/Linux
+      url: /mydoc_install_sss_on_mac_linux.html
       output: web, pdf
 
-    - title: Install Jekyll on Mac
-      url: /mydoc_install_jekyll_on_mac.html
-      output: web, pdf
-
-    - title: Install Jekyll on Windows
-      url: /mydoc_install_jekyll_on_windows.html
+    - title: Install SSS on Windows
+      url: /mydoc_install_sss_on_windows.html
       output: web, pdf
 
   - title: Hardware
     output: web, pdf
 
     folderitems:
-    - title: Pages
-      url: /mydoc_pages.html
+    - title: Final product
+      url: /mydoc_final_product.html
       output: web, pdf
 
-    - title: Posts
-      url: /mydoc_posts.html
+    - title: Panel
+      url: /mydoc_panel.html
       output: web, pdf
 
-    - title: Lists
-      url: /mydoc_lists.html
+    - title: Raspberry Pi GPIO
+      url: /mydoc_raspberry_pi_gpio.html
       output: web, pdf
 
-    - title: Conditional logic
-      url: /mydoc_conditional_logic.html
-      output: web, pdf
-
-    - title: Content reuse
-      url: /mydoc_content_reuse.html
-      output: web, pdf
-
-    - title: Collections
-      url: /mydoc_collections.html
-      output: web, pdf
-
-    - title: WebStorm editor tips
-      url: /mydoc_webstorm_text_editor.html
-      output: web, pdf
-
-    - title: Atom editor tips
-      url: /mydoc_atom_text_editor.html
+    - title: Enclosure and feet
+      url: /mydoc_enclosure_and_feet.html
       output: web, pdf
 
   - title: Simulator
     output: web, pdf
 
     folderitems:
-    - title: Sidebar navigation
-      url: /mydoc_sidebar_navigation.html
+    - title: Introduction
+      url: /mydoc_sim_introduction.html
       output: web, pdf
 
     - title: YAML tutorial in the context of Jekyll
@@ -128,56 +104,28 @@ entries:
     output: web, pdf
 
     folderitems:
-    - title: Tooltips
-      url: /mydoc_adding_tooltips.html
+    - title: Creating a demo
+      url: /creating_a_demo.html
       output: web, pdf
 
-    - title: Alerts
-      url: /mydoc_alerts.html
+    - title: Game Display (Graphics functions)
+      url: /mydoc_game_display.html
       output: web, pdf
 
-    - title: Icons
-      url: /mydoc_icons.html
+    - title: Adding outputs
+      url: /mydoc_adding_outputs.html
       output: web, pdf
 
-    - title: Images
-      url: /mydoc_images.html
-      output: web, pdf
-
-    - title: Code samples
-      url: /mydoc_code_samples.html
-      output: web, pdf
-
-    - title: Labels
-      url: /mydoc_labels.html
-      output: web, pdf
-
-    - title: Links
-      url: /mydoc_hyperlinks.html
-      output: web, pdf
-
-    - title: Navtabs
-      url: /mydoc_navtabs.html
-      output: web, pdf
-
-    - title: Tables
-      url: /mydoc_tables.html
-      output: web, pdf
-
-    - title: Syntax highlighting
-      url: /mydoc_syntax_highlighting.html
-      output: web, pdf
-
-    - title: Workflow maps
-      url: /mydoc_workflow_maps.html
+    - title: Adding inputs
+      url: /mydoc_adding_inputs.html
       output: web, pdf
 
   - title: Troubleshooting
     output: web, pdf
 
     folderitems:
-    - title: Commenting on files
-      url: /mydoc_commenting_on_files.html
+    - title: Common issues
+      url: /mydoc_common_issues.html
       output: web, pdf
 
 # Copyright 2021 Google LLC

@@ -1,10 +1,10 @@
 ---
-title: Lists
+title: Raspberry Pi GPIO
 keywords: bulleted lists, numbered lists
 tags: [formatting]
 summary: "This page shows how to create both bulleted and numbered lists"
 sidebar: mydoc_sidebar
-permalink: mydoc_lists.html
+permalink: mydoc_raspberry_pi_gpio.html
 ---
 
 ## Bulleted Lists

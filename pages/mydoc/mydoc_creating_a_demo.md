@@ -6,6 +6,7 @@ summary: "The easiest way to contribute to the SSS is to create a demo. Learning
 sidebar: mydoc_sidebar
 permalink: creating_a_demo.html
 folder: mydoc
+comments: false
 ---
 
 At its core, using the SSS is meant to be a learning experience. Anyone who wants to know more about computer engineering and the Internet of Things can go through the demos and learn quite a bit by experiencing the end result. However, the SSS is also designed to be an educational tool for designers. Anyone with the desire can make a demo themselves without needing to understand the entire system! In this article, we will discuss the template for making one of these demos by looking at the template’s basic structure and its required subcomponents.
