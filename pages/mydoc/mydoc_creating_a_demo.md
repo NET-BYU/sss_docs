@@ -97,6 +97,12 @@ If you are creating a demo which requires active user input, you will need to ke
 | DOWN_R | Down arrow released |
 | START_P | Start button pressed |
 | START_R | Start button released |
+| SEL_P | Select button pressed |
+| SEL_R | Select button released |
+| PRI_P | Primary action button pressed |
+| PRI_R | Primary action button released |
+| SEC_P | Secondary action button pressed |
+| SEC_R | Secondary action button released |
 
 By setting `self.input_queue = input_queue` you link the input_queue for your demo to the system’s input buffer. All input information can be retrieved directly through this object or by using the `get_input_buff()` function as explained below. 
 
