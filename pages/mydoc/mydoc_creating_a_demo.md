@@ -30,7 +30,7 @@ demos
 
 Notice that all of the folder names are **lowercase** and that all of the programs are named **main.py**. If you don’t follow this convention, the system won’t see your demo and it will fail to load when you run the program. 
 
-But what goes inside of your `main.py` is what really counts. The following format must be observed for your demo to run correctly. If you want to use it as a boilerplate to get you started, you can always copy it from `demos/template/main.py`. 
+But what goes inside of your `main.py` is what really counts. The following format must be observed for your demo to run correctly. If you want to use this example as a boilerplate to get you started, you can always copy it from `demos/template/main.py`. 
 
 ```python
 class Template:
@@ -90,7 +90,7 @@ If you are creating a demo which requires active user input, you will need to ke
 | LEFT_P | Left arrow pressed |
 | LEFT_R | Left arrow released |
 | RIGHT_P | Right arrow pressed |
-| RIGHT_P | Right arrow released |
+| RIGHT_R | Right arrow released |
 | UP_P | Up arrow pressed |
 | UP_R | Up arrow released |
 | DOWN_P | Down arrow pressed |
@@ -158,6 +158,6 @@ for keypress in self.get_input_buff():
 
 ## Conclusion
 
-By following the `template` format, you learn about and are accountable for most of the key components of a demo! If you are still feeling overwhelmed and don’t know where to start in your demo creation journey, take a look at some of the existing ones and try to modify them bit by bit, taking note of what changes you caused. If there are any clarifications that need to be made, please feel free to reach out to @Chris Kitras or @Ashton Palacios or just [open an issue on the GitHub repo](https://github.com/NET-BYU/seven_segment_sign/issues/new) so we can help you and also update our docs. We’re excited to see what create!
+By following the `template` format, you learn about and are accountable for most of the key components of a demo! If you are still feeling overwhelmed and don’t know where to start in your demo creation journey, take a look at some of the existing ones and try to modify them bit by bit, taking note of what changes you caused. If there are any clarifications that need to be made, please feel free to reach out to @Chris Kitras or @Ashton Palacios or just [open an issue on the GitHub repo](https://github.com/NET-BYU/seven_segment_sign/issues/new) so we can help you and also update our docs. We’re excited to see what you create!
 
 {% include links.html %}
