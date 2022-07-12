@@ -1,243 +1,137 @@
 ---
-title: Adding Inputs
-tags: [formatting]
+title: Adding Input Controllers
+tags: 
 keywords: font icons, buttons, images, vectors, font awesome, glyphicons
 last_updated: July 16, 2016
-summary: "You can integrate font icons through the Font Awesome and Glyphical Halflings libraries. These libraries allow you to embed icons through their libraries delivered as a link reference. You don't need any image libraries downloaded in your project."
+summary: "The modular nature of the SSS allows you to theoretically pull any input from any source and have it be processed by any demo. We will discuss how to integrate your own input device/service into the SSS."
 sidebar: mydoc_sidebar
 permalink: mydoc_adding_inputs.html
 folder: mydoc
 comments: false
 ---
 
-## Font icon options
-The theme has two font icon sets integrated: Font Awesome and Glyphicons Halflings. The latter is part of Bootstrap, while the former is independent. Font icons allow you to insert icons drawn as vectors from a CDN (so you don't have any local images on your own site).
+One of the central ideas of the SSS is that any demo can receive any type of input as long as it is formatted correctly. Adding an input to the SSS is not particularly difficult to do, but requires: (1) the correct initialization of the input device/service in `__init__.py` in the `controllers` module and (2) the actual driver file which contains the logic that forms the input and places it in the correct system queue (this will be it's own separate python file in the `controllers` directory).
 
-## External icons
+## `controllers` module
+Much like the `demos` module which contains all of the games and demos the SSS runs, the `controllers` module is the central location where all of the input devices/services pass information into the demo's `input_queue`. Just like a normal Python module, all of the initialization for this module takes place in the `__init__.py`. In the `controllers` module, the `__init__.py` is where all the controller services are initialized, checked for exceptions, and processed for the information to be put on the demos' `input_queue`.
 
-When you link to an external site, like [Jekyll](http://jekyllrb.com), an icon appears after the link. If you want to remove this icon, comment out this style in css/customstyles.css.
+### Initializing the input controller
+In the `__init__.py` file, there is only one function: `start_inputs(system_queue, demo_input_queue)` which initializes all controllers and attaches them to the `system_queue` and the `demo_input_queue`. The beginning of this function is where we initialize the generator for our new input. We do this by declaring a variable and assigning it to the output of our input driver's `start_processing_input()` function. In some cases, the status of a controller will be provided from a different function (i.e. the keyboard driver for the simulator). Take care to make sure you wrap the runner declaration inside of a `try/execpt` statement so if it fails, the entire SSS won't crash. In the case that the initialization runs into an exception, be sure to assign the runner to `None`. 
 
-```css
-/* this part adds an icon after external links, using FontAwesome*/
-a[href^="http://"]:after, a[href^="https://"]:after {
-    content: "\f08e";
-    font-family: FontAwesome;
-    font-weight: normal;
-    font-style: normal;
-    display: inline-block;
-    text-decoration: none;
-    padding-left: 3px;
-}
+```python
+try:
+    from . import example  # This imports the actual input driver
+    
+    example_runner = example.start_processing_input(system_queue, demo_input_queue)
+except Exception as e:
+    example_runner = None
 ```
 
-## See Font Awesome icons available
+### Polling from the controllers
+At the bottom of `start_inputs` is an infinite loop which will yields all of the inputs from each of the successfully initialized controllers into the appropriate system queues on every tick. To ensure that your controller has its inputs polled for every tick of the program, call `next()` on the generator declared:
 
-Go to the [Font Awesome library](http://fortawesome.github.io/Font-Awesome/icons/) to see the available icons.
-
-The Font Awesome icons allow you to adjust their size by simply adding `fa-2x`, `fa-3x` and so forth as a class to the icon to adjust their size to two times or three times the original size. As vector icons, they scale crisply at any size.
-
-Here's an example of how to scale up a camera icon:
-
-```html
-<i class="fa fa-camera-retro"></i> normal size (1x)
-<i class="fa fa-camera-retro fa-lg"></i> fa-lg
-<i class="fa fa-camera-retro fa-2x"></i> fa-2x
-<i class="fa fa-camera-retro fa-3x"></i> fa-3x
-<i class="fa fa-camera-retro fa-4x"></i> fa-4x
-<i class="fa fa-camera-retro fa-5x"></i> fa-5x
+```python
+if example_runner:
+    next(example_runner)
 ```
 
-Here's what they render to:
+### The result
+The following is a simplified result of what the `__init__.py` file should look like after having set up our `example` input. 
+```python
+from loguru import logger
 
-<i class="fa fa-camera-retro"></i> 1x
-<i class="fa fa-camera-retro fa-lg"></i> fa-lg
-<i class="fa fa-camera-retro fa-2x"></i> fa-2x
-<i class="fa fa-camera-retro fa-3x"></i> fa-3x
-<i class="fa fa-camera-retro fa-4x"></i> fa-4x
-<i class="fa fa-camera-retro fa-5x"></i> fa-5x
 
-With Font Awesome, you always use the `i` tag with the appropriate class. You also implement `fa` as a base class first. You can use font awesome icons inside other elements. Here I'm using a Font Awesome class inside a Bootstrap alert:
+def start_inputs(system_queue, demo_input_queue):
+    try:
+        logger.info("Loading my example input...")
+        from . import example  # This imports the actual input driver
 
-```html
-<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle"></i> <b>Warning: </b>This is a special warning message.
+        example_runner = example.start_processing_input(system_queue, demo_input_queue)
+        logger.info("...done")
+    except Exception as e:
+        example_runner = None
+        logger.warning(e)
+        logger.warning("Reason for input initialization failure will go here.")
+        logger.warning("Program will continue to run without this input.")
+    
+    # More inputs are declared and initialized here
+
+    while True:
+        if example_runner:
+            next(example_runner)
+
+        # More input runners are `ticked` through here
+
+        yield
 ```
 
-Here's the result:
+## Input Driver File
+The contents of your input driver file varies widely based on your method of generating input. The only requirement for each input driver file is a `start_processing_input(system_queue, demo_input_queue)` function which should contain a generator that will store input values in the correct queues before each `yield`. Depending on how your controlling service/device API works, you should return `None` from `start_processing_input`, throw an exception, or have a distinct function that checks initializability altogether in the case that it cannot start correctly.
 
-<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle fa-lg"></i> This is a special warning message.</div>
+### `example.py` Driver
+Below is an arbitrary example skeleton file of what an input driver should contain. For more concrete examples, look at the the `mqtt` or `keyboard` drivers.
 
-The notes, tips, warnings, etc., are pre-coded with Font Awesome and stored in the alerts.yml file. That file includes the following:
+```python
+# Example input driver file
+from example_device import inputs
 
-{% raw %}
-```yaml
-tip: '<div class="alert alert-success" role="alert"><i class="fa fa-check-square-o"></i> <b>Tip: </b>'
-note: '<div class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note: </b>'
-important: '<div class="alert alert-warning" role="alert"><i class="fa fa-warning"></i> <b>Important: </b>'
-warning: '<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle"></i> <b>Warning: </b>'
-end: '</div>'
+def start_processing_input(system_queue, demo_input_queue):
+    while True:
 
-callout_danger: '<div class="bs-callout bs-callout-danger">'
-callout_default: '<div class="bs-callout bs-callout-default">'
-callout_primary: '<div class="bs-callout bs-callout-primary">'
-callout_success: '<div class="bs-callout bs-callout-success">'
-callout_info: '<div class="bs-callout bs-callout-info">'
-callout_warning: '<div class="bs-callout bs-callout-warning">'
+        events = pygame.event.get()
 
-hr_faded: '<hr class="faded"/>'
-hr_shaded: '<hr class="shaded"/>'
-```
-{% endraw %}
+        for event in inputs.events:
+            # Check for KEYDOWN event and pass into input queue
+            if event.type == inputs.KEYDOWN:
 
-This means you can insert a tip, note, warning, or important alert simply by using these tags.
+                if event.key == ESCAPE:
+                    system_queue.put("QUIT")
+                elif event.key == LEFT:
+                    demo_input_queue.put("LEFT_P")
+                
+                # Continues for all key presses...
 
+            # check for KEYUP event and pass into input queue
+            elif event.type == inputs.KEYUP:
+                if event.key == LEFT:
+                    demo_input_queue.put("LEFT_R")
+                elif event.key == UP:
+                    demo_input_queue.put("UP_R")
 
-```liquid
-{% raw %}{% include note.html content="Add your note here." %}{% endraw %}
-```
+                # Continues for all key releases...
 
+            # Check for QUIT event.
+            elif event.type == QUIT:
+                system_queue.put("QUIT")
 
-```liquid
-{% raw %}{% include tip.html content="Add your tip here." %}{% endraw %}
-```
+        inputs.update(events)
 
+        yield
 
-```liquid
-{% raw %}{% include important.html content="Add your important info here." %}{% endraw %}
-```
-
-
-{% raw %}
-```liquid
-{% include warning.html content="Add your warning here." %}
-```
-{% endraw %}
-
-Here's the result:
-
-{% include note.html content="Add your note here." %}
-
-{% include tip.html content="Here's my tip." %}
-
-{% include important.html content="This information is very important." %}
-
-{% include warning.html content="If you overlook this, you may die." %}
-
-The color scheme is the default colors from Bootstrap. You can modify the icons or colors as needed.
-
-## Creating your own combinations
-
-You can innovate with your own combinations. Here's a similar approach with a file download icon:
-
-```html
-<div class="alert alert-success" role="alert"><i class="fa fa-download fa-lg"></i> This is a special tip about some file to download....</div>
 ```
 
-And the result:
+## Input Values
 
-<div class="alert alert-success" role="alert"><i class="fa fa-download fa-lg"></i> This is a special tip about some file to download....</div>
+### Generally support input values
+For an input controller to be compatible with all of the demos in the SSS system, the following input messages need to be handled:
 
+| LEFT_P | Left arrow pressed |
+| LEFT_R | Left arrow released |
+| RIGHT_P | Right arrow pressed |
+| RIGHT_P | Right arrow released |
+| UP_P | Up arrow pressed |
+| UP_R | Up arrow released |
+| DOWN_P | Down arrow pressed |
+| DOWN_R | Down arrow released |
+| START_P | Start button pressed |
+| START_R | Start button released |
+| SEL_P | Select button pressed |
+| SEL_R | Select button released |
+| PRI_P | Primary action button pressed |
+| PRI_R | Primary action button released |
+| SEC_P | Secondary action button pressed |
+| SEC_R | Secondary action button released |
 
-Grab the right class name from the [Font Awesome library](http://fortawesome.github.io/Font-Awesome/icons/) and then implement it by following the pattern shown previously.
+### Demo specific input values
 
-If you want to make your fonts even larger than the 5x style, add a custom style to your stylesheet like this:
-
-```css
-.fa-10x{font-size:1700%;}
-```
-
-Then any element with the attribute `fa-10x` will be enlarged 1700%.
-
-## Glyphicon icons available
-
-Glyphicons work similarly to Font Awesome. Go to the [Glyphicons library](http://getbootstrap.com/components/#glyphicons) to see the icons available.
-
-Although the Glyphicon Halflings library doesn't provide the scalable classes like Font Awesome, there's a [StackOverflow trick](http://stackoverflow.com/questions/24960201/how-do-i-make-glyphicons-bigger-change-size)  to make the icons behave in a similar way. This theme's stylesheet (customstyles.css) includes the following to the stylesheet:
-
-```css
-.gi-2x{font-size: 2em;}
-.gi-3x{font-size: 3em;}
-.gi-4x{font-size: 4em;}
-.gi-5x{font-size: 5em;}
-```
-
-Now you just add `gi-5x` or whatever to change the size of the font icon:
-
-```html
-<span class="glyphicon glyphicon-globe gi-5x"></span>
-```
-
-And here's the result:
-
-<span class="glyphicon glyphicon-globe gi-5x"></span>
-
-Glypicons use the `span` element instead of `i` to attach their classes.
-
-Here's another example:
-
-```html
-<span class="glyphicon glyphicon-download"></span>
-```
-
-<span class="glyphicon glyphicon-download"></span>
-
-And magnified:
-
-```html
-<span class="glyphicon glyphicon-download gi-3x"></span>
-```
-
-<span class="glyphicon glyphicon-download gi-3x"></span>
-
-You can also put glyphicons inside other elements:
-
-```html
-<div class="alert alert-danger" role="alert">
-  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-  <b>Error:</b> Enter a valid email address
-</div>
-```
-
-<div class="alert alert-danger" role="alert">
-  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-  <b>Error:</b> Enter a valid email address
-</div>
-
-## Callouts
-
-The previously shown alerts might be fine for short messages, but with longer notes, the solid color takes up a bit of space. In this theme, you also have the option of using callouts, which are pretty common in Bootstrap's documentation but surprisingly not offered as an explicit element. Their styles have been copied into this theme, in a way similar to the alerts:
-
-```html
-<div class="bs-callout bs-callout-info">
- This is a special info message. This is a special info message. This is a special info message. This is a special info message. This is a special info message. This is a special info message. This is a special info message. This is a special info message. This is a special info message. </div>
-```
-
-<div class="alert alert-info" role="alert"><span class="glyphicon glyphicon-question-sign"></span> This is a special info message. This is a special info message. This is a special info message. This is a special info message. This is a special info message. This is a special info message. This is a special info message. This is a special info message. This is a special info message. </div>
-
-And here's the shortcode:
-
-{% raw %}
-```
-{{site.data.alerts.callout_info}This is a special callout information message.{{site.data.alerts.end}}
-{% endraw %}
-```
-
-Here's the result:
-
-{{site.data.alerts.callout_info}}This is a special callout information message.{{site.data.alerts.end}}
-
-You can use any of the following:
-{% raw %}
-```
-{{site.data.alerts.callout_default}}
-{{site.data.alerts.callout_primary}}
-{{site.data.alerts.callout_success}}
-{{site.data.alerts.callout_info}}
-{{site.data.alerts.callout_warning}}
-```
-{% endraw %}
-
-The only difference is the color of the left bar.
-
-Callouts are explained in a bit more detail in [Alerts][mydoc_alerts].
-
-{% include links.html %}
+As of the current version of the SSS, there is no system-wide mechanism for handling demo-specific input. However, the assumption could be made that if only the specific controller and demo could understand the type of messages sent on the `demo_input_queue` and therefore this would not affect normal operation. Yet, this is untested behavior and is done at the risk of that specific input driver's authors/users.

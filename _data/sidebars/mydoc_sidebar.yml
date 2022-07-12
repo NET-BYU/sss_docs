@@ -100,11 +100,11 @@ entries:
       url: /mydoc_game_display.html
       output: web, pdf
 
-    - title: Adding outputs
+    - title: Adding Output Broadcasters
       url: /mydoc_adding_outputs.html
       output: web, pdf
 
-    - title: Adding inputs
+    - title: Adding Input Controllers
       url: /mydoc_adding_inputs.html
       output: web, pdf
 
