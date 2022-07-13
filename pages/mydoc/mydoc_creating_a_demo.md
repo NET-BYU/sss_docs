@@ -87,6 +87,8 @@ If you are creating a non-interactive demo (i.e. a shape bouncing around the scr
 
 If you are creating a demo which requires active user input, you will need to keep track of the values are are coming in through the input queue. Regardless of what controller is connected to the SSS, the supported inputs are:
 
+| Value | Description |
+|-------|--------|
 | LEFT_P | Left arrow pressed |
 | LEFT_R | Left arrow released |
 | RIGHT_P | Right arrow pressed |

@@ -78,7 +78,7 @@ from example_device import inputs
 def start_processing_input(system_queue, demo_input_queue):
     while True:
 
-        events = pygame.event.get()
+        events = inputs.events.get()
 
         for event in inputs.events:
             # Check for KEYDOWN event and pass into input queue
@@ -112,9 +112,11 @@ def start_processing_input(system_queue, demo_input_queue):
 
 ## Input Values
 
-### Generally support input values
+### Generally supported input values
 For an input controller to be compatible with all of the demos in the SSS system, the following input messages need to be handled:
 
+| Value | Description |
+|-------|--------|
 | LEFT_P | Left arrow pressed |
 | LEFT_R | Left arrow released |
 | RIGHT_P | Right arrow pressed |
