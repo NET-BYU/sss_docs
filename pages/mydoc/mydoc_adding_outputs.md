@@ -1,212 +1,110 @@
 ---
-title: Adding Outputs
-tags: [formatting]
-keywords: notes, tips, cautions, warnings, admonitions
-last_updated: July 3, 2016
-summary: "You can insert notes, tips, warnings, and important alerts in your content. These notes make use of Bootstrap styling and are available through data references such as site.data.alerts.note."
+title: Adding Output Broadcasters
+tags: 
+keywords: outputs, broadcasters, mqtt, generators
+last_updated: July 12, 2022
+summary: "The modular nature of the SSS allows you to theoretically push any output from the demo output queue to any receiver and have it be processed by that device/service. We will discuss how to integrate your own output device/service into the SSS."
 sidebar: mydoc_sidebar
 permalink: mydoc_adding_outputs.html
 folder: mydoc
 comments: false
 ---
 
-## About alerts
+One of the central ideas of the SSS is that any demo can transmit any type of output and  as long as it is formatted correctly. Handling output from the SSS is not particularly difficult to do, but requires: 
+1. The correct initialization of the output device/service in `__init__.py` in the `broadcasters` module
+2. The actual driver file which contains the logic to handle demo output by reading it in from the correct system queue (this will be it's own separate python file in the `broadcasters` directory).
 
-Alerts are little warnings, info, or other messages that you have called out in special formatting. In order to use these alerts or callouts, reference the appropriate value stored in the alerts.yml file as described in the following sections.
+## `broadcasters` module
+Much like the `demos` module which contains all of the games and demos the SSS runs, the `broadcasters` module is the central location where all of the output devices/services receive information from the demo's `output_queue` and relay that to the appropriate broadcasters. Just like a normal Python module, all of the initialization for this module takes place in the `__init__.py`. In the `broadcasters` module, the `__init__.py` is where all the broadcasting services are initialized, checked for exceptions, and process the information from the demos' `output_queue`.
 
-## Alerts
+### Initializing the output broadcaster
+In the `__init__.py` file, there is only one function: `start_outputs(system_queue, demo_output_queue)` which initializes all broadcasters and attaches them to the `system_queue` and the `demo_output_queue`. The beginning of this function is where we create a queue that will feed into output device. This is where the output of the `demo_output_queue` will eventually go. We then initialize the runner for our output device/service by declaring a variable and assigning it to the return value of our output driver's `start_processing_output()` function. In some cases, the initialization status of a broadcaster may be provided by a different function. Make sure you wrap the runner declaration inside of a `try/execpt` statement so if it fails, the entire SSS won't crash. In the case that the initialization runs into an exception, be sure to assign the runner to `None`. 
 
-Similar to [inserting images][mydoc_images], you insert alerts through various includes that have been developed. These includes provide templates through which you pass parameters to easily populate the right HTML code.
+```python
+try:
+    from . import example  # This imports the actual output driver
 
-```
-{%raw%}{% include note.html content="This is my note. All the content I type here is treated as a single paragraph." %}{% endraw%}
-```
-
-Here's the result:
-
-{% include note.html content="This is my note. All the content I type here is treated as a single paragraph." %}
-
-With alerts, there's just one include property:
-
-| Property | description |
-|-------|--------|
-| content | The content for the alert. |
-
-## Using block level tags inside the alerts {#blockleveltags}
-
-If you need multiple paragraphs, enter `<br/><br/>` tags. This is because block level tags aren't allowed here, as Kramdown is processing the content as Markdown despite the fact that the content is surrounded by HTML tags. Here's an example with a break:
-
-```
-{%raw%}{% include note.html content="This is my note. All the content I type here is treated as a single paragraph. <br/><br/> Now I'm typing on a  new line." %}{% endraw%}
+    example_q = Queue()
+    
+    example_runner = example.start_processing_output(system_queue, example_q)
+except Exception as e:
+    example_runner = None
 ```
 
-Here's the result:
+### Polling from `demo_output_queue`
+At the bottom of `start_outputs` is an infinite loop which extracts the current values on the `demo_output_queue` and passes them to available broadcaster runners. To ensure that your broadcaster receives its outputs from the output queue for every tick of the program, make sure `next()` is called on the runner:
 
-{% include note.html content="This is my note. All the content I type here is treated as a single paragraph. <br/><br/> Now I'm typing on a new line." %}
+```python
 
-The include uses `markdown="span"` as an attribute, which means kramdown will process the entire `content` as a span. You can't use block elements such as `p` or `div` or `pre`. If you need these elements, you can either manually surround the content with the HTML from the include, or you can use these tags:
+# Loops through every available output message in the output queue
+for payload in utils.get_all_from_queue(demo_output_queue):
 
-```
-{% raw %}{{site.data.alerts.note}}
-<p>This is my note.</p>
-<pre>
-def foo(x):<br>
-&nbsp;&nbsp;&nbsp;&nbsp;return x+1
-</pre>
-{{site.data.alerts.end}}{% endraw %}
+    # If broadcaster is successfully initialized, the output will go to the service/device's queue and into the driver
+    if example_runner:
+        example_q.put(payload)
+        next(example_runner)
 ```
 
-**Result:**
+### The result
+The following is a simplified result of what the `__init__.py` file should look like after having set up our `example` output. 
+```python
+from queue import Queue
 
-{{site.data.alerts.note}}
-<p>This is my note.</p>
-<pre>
-def foo(x):<br>
-&nbsp;&nbsp;&nbsp;&nbsp;return x+1
-</pre>
-{{site.data.alerts.end}}
+from loguru import logger
 
-The same Bootstrap code from the alert is stored in yaml files inside the \_data folder. (This was how I previously implemented this code, but since this method was prone to error and didn't trigger any build warnings or failures when incorrectly coded, I changed the approach to use includes instead.)
+from . import utils
 
-## Types of alerts available
 
-There are four types of alerts you can leverage:
+def start_outputs(system_queue, demo_output_queue):
+    try:
+        logger.info("Loading example output...")
+        from . import example
 
-* note.html
-* tip.html
-* warning.html
-* important.html
+        example_q = Queue()
 
-They function the same except they have a different color, icon, and alert word. You include the different types by selecting the include template you want. Here are samples of each alert:
+        example_runner = example.start_processing_output(system_queue, example_q)
+        logger.info("...done")
+    except Exception as e:
+        example_runner = None
+        logger.warning(e)
+        logger.warning("Reason for broadcaster initialization failure will go here.")
+        logger.warning("Program will continue to run without this output.")
 
-{% include note.html content="This is my note." %}
+    # More broadcasters are declared and initialized here
 
-{% include tip.html content="This is my tip." %}
+    while True:
 
-{% include warning.html content="This is my warning." %}
+        for payload in utils.get_all_from_queue(demo_output_queue):
+            if example_runner:
+                example_q.put(payload)
+                next(example_runner)
 
-{% include important.html content="This is my important info." %}
+            # More output runners are `ticked` through here
 
-These alerts leverage includes stored in the \_include folder. The `content` option is a parameter that you pass to the include. In the include, the parameter is passed like this:
-
-```
-{% raw %}<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> {{include.content}}{% endraw %}</div>
-```
-
-The content in `content="This is my note."` gets inserted into the `{% raw %}{{include.content}}}{% endraw %}` part of the template. You can follow this same pattern to build additional includes. See this [Jekyll screencast on includes](http://jekyll.tips/jekyll-casts/includes/) or [this screencast](https://www.youtube.com/watch?v=TJcn_PJ2100) for more information.
-
-## Callouts
-
-There's another type of callout available called callouts. This format is typically used for longer callout that spans more than one or two paragraphs, but really it's just a stylistic preference whether to use an alert or callout.
-
-Here's the syntax for a callout:
-
-```
-{% raw %}{% include callout.html content="This is my callout. It has a border on the left whose color you define by passing a type parameter. I typically use this style of callout when I have more information that I want to share, often spanning multiple paragraphs. " type="primary" %} {% endraw %}
+        yield
 ```
 
-Here's the result:
+## Output Driver File
+The contents of your output driver file varies widely based on the device or service's method of receiving input. The only requirement for each output driver file is a `start_processing_output(system_queue, driver_q)` function which should contain a generator that will read demo output values from the queue created for the driver before each `yield`. Depending on how your broadcasting service/device API works, you should return `None` from `start_processing_output`, throw an exception, or have a distinct function that checks initializability altogether in the case that it cannot start correctly.
 
-{% include callout.html content="This is my callout. It has a border on the left whose color you define by passing a type parameter. I typically use this style of callout when I have more information that I want to share, often spanning multiple paragraphs." type="primary" %}
+### `example.py` Driver
+Below is an arbitrary example skeleton file of what an output driver could look like. For a more concrete example, look at the the `mqtt` driver.
 
-The available properties for callouts are as follows:
+```python
+# Example output driver file
+from example_device import process_data
 
-| Property | description |
-|-------|--------|
-| content | The content for the callout. |
-| type | The style for the callout. Options are `danger`, `default`, `primary`, `success`, `info`, and `warning`.|
+from . import utils
 
-The types just define the color of the left border. Each of these callout types get inserted as a class name in the callout template. These class names correspond with styles in Bootstrap. These classes are common Bootstrap class names whose style attributes differ depending on your Bootstrap theme and style definitions.
+def start_processing_output(system_queue, example_q):
+    
+    while True:
 
-Here's an example of each different type of callout:
-
-{% include callout.html content="This is my **danger** type callout. It has a border on the left whose color you define by passing a type parameter." type="danger" %}
-
-{% include callout.html content="This is my **default** type callout. It has a border on the left whose color you define by passing a type parameter." type="default" %}
-
-{% include callout.html content="This is my **primary** type callout. It has a border on the left whose color you define by passing a type parameter." type="primary" %}
-
-{% include callout.html content="This is my **success** type callout. It has a border on the left whose color you define by passing a type parameter." type="success" %}
-
-{% include callout.html content="This is my **info** type callout. It has a border on the left whose color you define by passing a type parameter." type="info" %}
-
-{% include callout.html content="This is my **warning** type callout. It has a border on the left whose color you define by passing a type parameter." type="warning" %}
-
-Now that in contrast to alerts, callouts don't include the alert word (note, tip, warning, or important). You have to manually include it inside `content` if you want it.
-
-To include paragraph breaks, use `<br/><br/>` inside the callout:
+        for item in utils.get_all_from_queue(example_q):
+            process_data(item)
+        yield
 
 ```
-{% raw %}{% include callout.html content="**Important information**: This is my callout. It has a border on the left whose color you define by passing a type parameter. I typically use this style of callout when I have more information that I want to share, often spanning multiple paragraphs. <br/><br/>Here I am starting a new paragraph, because I have lots of information to share. You may wonder why I'm using line breaks instead of paragraph tags. This is because Kramdown processes the Markdown here as a span rather than a div (for whatever reason). Be grateful that you can be using Markdown at all inside of HTML. That's usually not allowed in Markdown syntax, but it's allowed here." type="primary" %} {% endraw %}
-```
 
-Here's the result:
-
-{% include callout.html content="**Important information**: This is my callout. It has a border on the left whose color you define by passing a type parameter. I typically use this style of callout when I have more information that I want to share, often spanning multiple paragraphs. <br/><br/>Here I am starting a new paragraph, because I have lots of information to share. You may wonder why I'm using line breaks instead of paragraph tags. This is because Kramdown processes the Markdown here as a span rather than a div (for whatever reason). Be grateful that you can be using Markdown at all inside of HTML. That's usually not allowed in Markdown syntax, but it's allowed here." type="primary" %}
-
-## Use Liquid variables inside parameters with includes
-
-Suppose you have a product name or some other property that you're storing as a variable in your configuration file (\_config.yml), and you want to use this variable in the `content` parameter for your alert or callout. You will get an error if you use Liquid syntax inside a include parameter. For example, this syntax will produce an error:
-
-```
-{%raw%}{% include note.html content="The {{site.company}} is pleased to announce an upcoming release." %}{%endraw%}
-```
-
-The error will say something like this:
-
-```
-Liquid Exception: Invalid syntax for include tag. File contains invalid characters or sequences: ... Valid syntax: {%raw%}{% include file.ext param='value' param2='value' %}{%endraw%}
-```
-
-To use variables in your include parameters, you must use the "variable parameter" approach. First you use a `capture` tag to capture some content. Then you reference this captured tag in your include. Here's an example.
-
-In my site configuration file (\_congfig.yml), I have a property called `company_name`.
-
-```yaml
-company_name: Your company
-```
-
-I want to use this variable in my note include.
-
-First, before the note I capture the content for my note's include like this:
-
-```liquid
-{%raw%}{% capture company_note %}The {{site.company_name}} company is pleased to announce an upcoming release.{% endcapture %}{%endraw%}
-```
-
-Now reference the `company_note` in your `include` parameter like this:
-
-```
-{%raw%}{% include note.html content=company_note}{%endraw%}
-```
-
-Here's the result:
-
-{% capture company_note %}The {{site.company_name}} is pleased to announce an upcoming release.{% endcapture %}
-{% include note.html content=company_note %}
-
-Note the omission of quotation marks with variable parameters.
-
-Also note that instead of storing the variable in your site's configuration file, you could also put the variable in your page's frontmatter. Then instead of using `{%raw%}{{site.company_name}}{%endraw%}` you would use `{%raw%}{{page.company_name}}{%endraw%}`.
-
-## Markdown inside of callouts and alerts
-
-You can use Markdown inside of callouts and alerts, even though this content actually gets inserted inside of HTML in the include. This is one of the advantages of kramdown Markdown. The include template has an attribute of `markdown="span"` that allows for the processor to parse Markdown inside of HTML.
-
-## Validity checking
-
-If you have some of the syntax wrong with an alert or callout, you'll see an error when Jekyll tries to build your site. The error may look like this:
-
-```
-{% raw %}Liquid Exception: Invalid syntax for include tag: content="This is my **info** type callout. It has a border on the left whose color you define by passing a type parameter. type="info" Valid syntax: {% include file.ext param='value' param2='value' %} in mydoc/mydoc_alerts.md {% endraw %}
-```
-
-These errors are a good thing, because it lets you know there's an error in your syntax. Without the errors, you may not realize that you coded something incorrectly until you see the lack of alert or callout styling in your output.
-
-In this case, the quotation marks aren't set correctly. I forgot the closing quotation mark for the content parameter include.
-
-## Blast a warning to users on every page
-
-If you want to blast a warning to users on every page, add the alert or callout to the \_layouts/page.html page right below the frontmatter. Every page using the page layout (all, by default) will show this message.
-
-{% include links.html %}
+## Output Values
+Unlike `demo_input_queue` values, there are no set of universally supported output types for the SSS. It is understood that each type of output that gets put on the `demo_output_queue` will vary widely depending on that demo's targeted broadcaster and purpose. However, it is recommended that info that is sent on the output queue be formatted in JSON.

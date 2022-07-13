@@ -1,8 +1,8 @@
 ---
 title: Adding Input Controllers
 tags: 
-keywords: font icons, buttons, images, vectors, font awesome, glyphicons
-last_updated: July 16, 2016
+keywords: inputs, controllers, mqtt, keyboard, gamepad, generators
+last_updated: July 12, 2022
 summary: "The modular nature of the SSS allows you to theoretically pull any input from any source and have it be processed by any demo. We will discuss how to integrate your own input device/service into the SSS."
 sidebar: mydoc_sidebar
 permalink: mydoc_adding_inputs.html
@@ -10,13 +10,15 @@ folder: mydoc
 comments: false
 ---
 
-One of the central ideas of the SSS is that any demo can receive any type of input as long as it is formatted correctly. Adding an input to the SSS is not particularly difficult to do, but requires: (1) the correct initialization of the input device/service in `__init__.py` in the `controllers` module and (2) the actual driver file which contains the logic that forms the input and places it in the correct system queue (this will be it's own separate python file in the `controllers` directory).
+One of the central ideas of the SSS is that any demo can receive any type of input as long as it is formatted correctly. Adding an input to the SSS is not particularly difficult to do, but requires: 
+1. The correct initialization of the input device/service in `__init__.py` in the `controllers` module
+2. The actual driver file which contains the logic that forms the input and places it in the correct system queue (this will be it's own separate python file in the `controllers` directory).
 
 ## `controllers` module
 Much like the `demos` module which contains all of the games and demos the SSS runs, the `controllers` module is the central location where all of the input devices/services pass information into the demo's `input_queue`. Just like a normal Python module, all of the initialization for this module takes place in the `__init__.py`. In the `controllers` module, the `__init__.py` is where all the controller services are initialized, checked for exceptions, and processed for the information to be put on the demos' `input_queue`.
 
 ### Initializing the input controller
-In the `__init__.py` file, there is only one function: `start_inputs(system_queue, demo_input_queue)` which initializes all controllers and attaches them to the `system_queue` and the `demo_input_queue`. The beginning of this function is where we initialize the generator for our new input. We do this by declaring a variable and assigning it to the output of our input driver's `start_processing_input()` function. In some cases, the status of a controller will be provided from a different function (i.e. the keyboard driver for the simulator). Take care to make sure you wrap the runner declaration inside of a `try/execpt` statement so if it fails, the entire SSS won't crash. In the case that the initialization runs into an exception, be sure to assign the runner to `None`. 
+In the `__init__.py` file, there is only one function: `start_inputs(system_queue, demo_input_queue)` which initializes all controllers and attaches them to the `system_queue` and the `demo_input_queue`. The beginning of this function is where we initialize the runner for our new input. We do this by declaring a variable and assigning it to the return value of our input driver's `start_processing_input()` function. In some cases, the initialization status of a controller will be provided from a different function (i.e. the keyboard driver for the simulator). Make sure you wrap the runner declaration inside of a `try/execpt` statement so if it fails, the entire SSS won't crash. In the case that the initialization runs into an exception, be sure to assign the runner to `None`. 
 
 ```python
 try:
